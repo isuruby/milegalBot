@@ -5,17 +5,20 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, filters, CallbackContext
 
 # 🔹 Obtener claves desde las variables de entorno (Railway)
-TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()  # Elimina espacios extra
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()  # Elimina espacios extra
 
 # 🔹 Validar que las claves existen antes de continuar
-if not TELEGRAM_BOT_TOKEN or not OPENAI_API_KEY:
-    raise ValueError("❌ ERROR: Las claves API no están configuradas en las variables de entorno.")
+if not TELEGRAM_BOT_TOKEN:
+    raise ValueError("❌ ERROR: El token de Telegram no está configurado en las variables de entorno.")
+
+if not OPENAI_API_KEY:
+    raise ValueError("❌ ERROR: La clave API de OpenAI no está configurada en las variables de entorno.")
 
 # 🔹 Configurar OpenAI
 openai.api_key = OPENAI_API_KEY
 
-# 🔹 Configurar logging para ver mensajes en la consola de Railway
+# 🔹 Configurar logging para ver mensajes en Railway
 logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO)
 
 # 🔹 Función para responder mensajes con GPT-3.5
@@ -38,7 +41,7 @@ async def responder(update: Update, context: CallbackContext):
 
     await update.message.reply_text(respuesta)
 
-# 🔹 Iniciar el bot usando `Application` en vez de `Updater`
+# 🔹 Iniciar el bot usando `ApplicationBuilder`
 def main():
     app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
     
