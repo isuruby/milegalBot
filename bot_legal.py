@@ -4,11 +4,15 @@ import logging
 from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, filters, CallbackContext
 
-# 🔹 Obtener claves desde Railway y eliminar espacios extra
+# 🔹 Obtener claves desde las variables de entorno (Railway)
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
 
-# 🔹 Validar que las claves existen
+# 🔹 Diagnóstico: Verificar si los tokens se están cargando correctamente
+print(f"🔹 Token de Telegram cargado en Railway: '{TELEGRAM_BOT_TOKEN}' (Longitud: {len(TELEGRAM_BOT_TOKEN)})")
+print(f"🔹 Clave de OpenAI cargada en Railway: (Longitud: {len(OPENAI_API_KEY)})")
+
+# 🔹 Validar que las claves existen antes de continuar
 if not TELEGRAM_BOT_TOKEN:
     raise ValueError("❌ ERROR: El token de Telegram no está configurado en Railway o es incorrecto.")
 
@@ -17,7 +21,6 @@ if not OPENAI_API_KEY:
 
 # 🔹 Configurar OpenAI
 openai.api_key = OPENAI_API_KEY
-
 
 # 🔹 Configurar logging para ver mensajes en Railway
 logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO)
