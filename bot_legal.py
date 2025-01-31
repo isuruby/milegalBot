@@ -23,8 +23,8 @@ if not TELEGRAM_BOT_TOKEN:
 if not OPENAI_API_KEY:
     raise ValueError("❌ ERROR: La clave API de OpenAI no está configurada o es incorrecta.")
 
-# 🔹 Inicializar OpenAI con la nueva API
-client = OpenAI(api_key=OPENAI_API_KEY)
+# 🔹 Inicializar cliente de OpenAI (sin api_key en OpenAI(), ya que usa la variable de entorno)
+client = OpenAI()
 
 # 🔹 Configurar logging para depuración en Railway
 logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO)
